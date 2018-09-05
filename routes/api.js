@@ -14,40 +14,22 @@ var ObjectId = require('mongodb').ObjectId;
 const MONGODB_CONNECTION_STRING = process.env.DB;
 //Example connection: MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {});
 
+const bookHandler = require('../controllers/bookHandler')
+
 module.exports = function (app) {
 
   app.route('/api/books')
-    .get(function (req, res){
-      //response will be array of book objects
-      //json res format: [{"_id": bookid, "title": book_title, "commentcount": num_of_comments },...]
-    })
+    .get(bookHandler.listAllBooks)
     
-    .post(function (req, res){
-      var title = req.body.title;
-      //response will contain new book object including atleast _id and title
-    })
+    .post(bookHandler.addBook)
     
-    .delete(function(req, res){
-      //if successful response will be 'complete delete successful'
-    });
-
-
+    .delete(bookHandler.deleteAllBooks);
 
   app.route('/api/books/:id')
-    .get(function (req, res){
-      var bookid = req.params.id;
-      //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
-    })
+    .get(bookHandler.displayBook)
     
-    .post(function(req, res){
-      var bookid = req.params.id;
-      var comment = req.body.comment;
-      //json res format same as .get
-    })
+    .post(bookHandler.addComment)
     
-    .delete(function(req, res){
-      var bookid = req.params.id;
-      //if successful response will be 'delete successful'
-    });
+    .delete(bookHandler.deleteBook);
   
 };
