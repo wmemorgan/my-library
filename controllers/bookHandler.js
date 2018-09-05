@@ -4,18 +4,34 @@ const ObjectId = require('mongodb').ObjectID;
 const CONNECTION_STRING = process.env.DATABASE; //MongoClient.connect(CONNECTION_STRING, function(err, db) {});
 
 // Connect to database
-// mongo.connect(CONNECTION_STRING, (err, conn) => {
-//   if (err) throw err
-//   else {
-//     db = conn.collection('books')
-//     console.log(`Successfully connected to: ${CONNECTION_STRING}`)
-//   }
-// })
+mongo.connect(CONNECTION_STRING, (err, conn) => {
+  if (err) throw err
+  else {
+    db = conn.collection('books')
+    console.log(`Successfully connected to: ${CONNECTION_STRING}`)
+  }
+})
 
 // Add new book
 exports.addBook = (req, res) => {
-
-  res.send(`New book added`)
+  let { title } = req.body
+  if (!title || title == '') {
+    res.status(400).send('No book title added')
+  } else {
+    db.insertOne(
+      {
+        title: title,
+        comments: []
+      }, (err, doc) => {
+          if (err) {
+            console.error(err)
+            res.status(500).send(err)
+          }
+          else {
+            res.json(doc.ops[0])
+          }
+        }
+    )} 
 }
 
 // Add book comments
