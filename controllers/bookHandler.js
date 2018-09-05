@@ -49,8 +49,15 @@ exports.addComment = (req, res) => {
     } else if (doc === null) {
       res.send('Comment not added to book')
     } else {
-      console.log(comment)
-      res.json(comment)
+      db.findOne({'_id': ObjectId(id)}, (err, doc) => {
+        if (err) throw err
+        else if (doc == null) {
+          res.send(`no book exists`)
+        } else {
+          console.log(doc)
+          res.json(doc)
+        }
+      })
     }
   })
 } 
