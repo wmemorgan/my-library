@@ -80,9 +80,9 @@ exports.listAllBooks = (req, res) => {
 
 // Display book details
 exports.displayBook = (req, res) => {
-  let id = req.params.id
+  let id = ObjectId(req.params.id)
   console.log(`input id: `, id)
-  db.findOne({'_id': ObjectId(id) }, (err, doc) => {
+  db.findOne({'_id': id }, (err, doc) => {
     if (err) {
       console.error(err)
       res.status(500).send('Database query error')
