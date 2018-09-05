@@ -42,8 +42,18 @@ exports.addComment = (req, res) => {
 
 // List all books
 exports.listAllBooks = (req, res) => {
-
-  res.send('List all books')
+  db.find()
+  .toArray((err, doc) => {
+    if (err) {
+      console.error(err)
+      res.status(500).send(err)
+    }
+    else {
+      // Code inspired by Drinka Ľubomír https://github.com/lubodrinka/Personal-Library/blob/master/routes/api.js
+      results = doc.map(d => d={ "_id": d._id, "title": d.title, "commentCount": d.comments.length })
+      res.send(results)
+    }
+  })
 }
 
 // Display book details
