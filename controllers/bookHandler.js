@@ -40,16 +40,16 @@ exports.addBook = (req, res) => {
 exports.addComment = (req, res) => {
   let { comment } = req.body
   console.log(`new comment: `, comment)
-  let id = req.params.id
+  let id = ObjectId(req.params.id)
   console.log(`input id: `, id)
-  db.update({ '_id': ObjectId(id) }, { $push: { comments: comment } }, (err, doc) => {
+  db.update({ '_id': id }, { $push: { comments: comment } }, (err, doc) => {
     if (err) {
       console.error(err)
       res.status(500).send('Database update attempt failed')
     } else if (doc === null) {
       res.send('Comment not added to book')
     } else {
-      db.findOne({'_id': ObjectId(id)}, (err, doc) => {
+      db.findOne({ '_id': id }, (err, doc) => {
         if (err) throw err
         else if (doc == null) {
           res.send(`no book exists`)
