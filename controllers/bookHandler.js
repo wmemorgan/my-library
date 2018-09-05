@@ -45,9 +45,9 @@ exports.addComment = (req, res) => {
   db.update({ '_id': id }, { $push: { comments: comment } }, (err, doc) => {
     if (err) {
       console.error(err)
-      res.status(500).send('Database update attempt failed')
+      res.status(500).send('database update attempt failed')
     } else if (doc === null) {
-      res.send('Comment not added to book')
+      res.send('comment not added to book')
     } else {
       db.findOne({ '_id': id }, (err, doc) => {
         if (err) throw err
@@ -85,7 +85,7 @@ exports.displayBook = (req, res) => {
   db.findOne({'_id': id }, (err, doc) => {
     if (err) {
       console.error(err)
-      res.status(500).send('Database query error')
+      res.status(500).send('database query error')
     } else if (doc === null) {
         res.send('no book exists')
     }
@@ -97,8 +97,30 @@ exports.displayBook = (req, res) => {
 
 // Delete selected book
 exports.deleteBook = (req, res) => {
-
-  res.send(`delete successful`)
+  let id = ObjectId(req.params.id)
+  console.log(`input id: `, id)
+  db.findOne({ '_id': id }, (err, doc) => {
+    if (err) {
+      console.error(err)
+      res.status(400).send(`database query error`)
+    }
+    else if (doc === null) {
+      res.status(400).send('no book exists')
+    } else {
+        db.deleteOne({ _id: id }, (err, doc) => {
+          if (err) {
+            console.error(err)
+            res.send(`database delete attempt failed`)
+          } else if (doc == null) {
+            res.send('no book exists')
+          }
+          else {
+            console.log(`delete successful`)
+            res.send(`delete successful`)
+          }
+        })
+      }
+  })
 }
 
 // Delete all books
