@@ -3,11 +3,13 @@ const ObjectId = require('mongodb').ObjectID;
 
 const CONNECTION_STRING = process.env.DATABASE; //MongoClient.connect(CONNECTION_STRING, function(err, db) {});
 
+let db
+
 // Connect to database
-mongo.connect(CONNECTION_STRING, (err, conn) => {
+mongo.connect(CONNECTION_STRING, async (err, conn) => {
   if (err) throw err
   else {
-    db = conn.collection('books')
+    db = await conn.collection('books')
     console.log(`Successfully connected to: ${CONNECTION_STRING}`)
   }
 })
@@ -58,8 +60,22 @@ exports.listAllBooks = (req, res) => {
 
 // Display book details
 exports.displayBook = (req, res) => {
+  let id = req.params.id
+  console.log(`input id: `, id)
+  db.findOne({'_id': ObjectId(id) }, (err, doc) => {
+    if (err) {
+      console.error(err)
+      res.status(500).send('Database query error')
+    } else if (doc === null) {
+        res.send('no book exists')
+    }
+    else {
+      res.send(doc)
+    }
+  })
+  
 
-  res.send('Display book details')
+  
 }
 
 // Delete selected book
