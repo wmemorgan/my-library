@@ -38,9 +38,22 @@ exports.addBook = (req, res) => {
 
 // Add book comments
 exports.addComment = (req, res) => {
-
-  res.send(`New comment added`)
-}
+  let { comment } = req.body
+  console.log(`new comment: `, comment)
+  let id = req.params.id
+  console.log(`input id: `, id)
+  db.update({ '_id': ObjectId(id) }, { $push: { comments: comment } }, (err, doc) => {
+    if (err) {
+      console.error(err)
+      res.status(500).send('Database update attempt failed')
+    } else if (doc === null) {
+      res.send('Comment not added to book')
+    } else {
+      console.log(comment)
+      res.json(comment)
+    }
+  })
+} 
 
 // List all books
 exports.listAllBooks = (req, res) => {
@@ -72,10 +85,7 @@ exports.displayBook = (req, res) => {
     else {
       res.send(doc)
     }
-  })
-  
-
-  
+  })  
 }
 
 // Delete selected book
