@@ -125,7 +125,7 @@ exports.deleteBook = (req, res) => {
 
 // Delete all books
 exports.deleteAllBooks = (req, res) => {
-
+  db.remove()
   res.send(`complete delete successful`)
 }
 
