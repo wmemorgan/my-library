@@ -40,7 +40,8 @@ exports.addBook = (req, res) => {
 exports.addComment = (req, res) => {
   let { comment } = req.body
   console.log(`new comment: `, comment)
-  let id = ObjectId(req.params.id)
+  let hex = /[0-9A-Fa-f]{6}/g;
+  let id = (hex.test(req.params.id)) ? ObjectId(req.params.id) : req.params.id;
   console.log(`input id: `, id)
   db.update({ '_id': id }, { $push: { comments: comment } }, (err, doc) => {
     if (err) {
@@ -80,7 +81,9 @@ exports.listAllBooks = (req, res) => {
 
 // Display book details
 exports.displayBook = (req, res) => {
-  let id = ObjectId(req.params.id)
+  let hex = /[0-9A-Fa-f]{6}/g;
+  let id = (hex.test(req.params.id)) ? ObjectId(req.params.id) : req.params.id;
+  // let id = ObjectId(req.params.id)
   console.log(`input id: `, id)
   db.findOne({'_id': id }, (err, doc) => {
     if (err) {
@@ -97,7 +100,8 @@ exports.displayBook = (req, res) => {
 
 // Delete selected book
 exports.deleteBook = (req, res) => {
-  let id = ObjectId(req.params.id)
+  let hex = /[0-9A-Fa-f]{6}/g;
+  let id = (hex.test(req.params.id)) ? ObjectId(req.params.id) : req.params.id;
   console.log(`input id: `, id)
   db.findOne({ '_id': id }, (err, doc) => {
     if (err) {
