@@ -126,11 +126,12 @@ suite('Functional Tests', function () {
           .post(`/api/books/${TEST_ID}`)
           .send({ comment: 'Test comment' })
           .end(function (err, res) {
-            console.log(`res.body: `, res.body)
+            comments = res.body.comments
             assert.equal(res.status, 200)
+            assert.equal(comments[comments.length-1], 'Test comment')
             done()
           })
-      });
+      })
 
     });
 
