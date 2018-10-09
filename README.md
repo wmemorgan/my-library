@@ -1,6 +1,8 @@
 **FreeCodeCamp**- Information Security and Quality Assurance
 ------
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/wmemorgan/my-library.svg)](https://greenkeeper.io/)
+
 Project Personal Library
 
 1) ADD YOUR MongoDB connection string to .env without quotes as db
